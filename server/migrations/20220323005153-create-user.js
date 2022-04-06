@@ -4,7 +4,7 @@ module.exports = {
     await queryInterface.createTable(
       "Users",
       {
-        email: {
+        id: {
           type: Sequelize.STRING,
           primaryKey: true,
           unique: true,
@@ -15,7 +15,19 @@ module.exports = {
         image: {
           type: Sequelize.STRING,
         },
-        provider: {
+        accessToken: {
+          type: Sequelize.STRING,
+        },
+        roadAddress: {
+          type: Sequelize.STRING,
+        },
+        location: {
+          type: Sequelize.STRING,
+        },
+        long: {
+          type: Sequelize.STRING,
+        },
+        lat: {
           type: Sequelize.STRING,
         },
         createdAt: {

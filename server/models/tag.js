@@ -15,11 +15,17 @@ module.exports = (sequelize, DataTypes) => {
   }
   Tag.init(
     {
-      id: DataTypes.UUID,
+      id: {
+        type: DataTypes.INTEGER,
+        autoIncrement: true,
+        primaryKey: true,
+        comment: "고유번호 UUID",
+      },
       stack: DataTypes.STRING,
     },
     {
       sequelize,
+      timestamps: false,
       modelName: "Tag",
     }
   );

@@ -4,15 +4,15 @@ module.exports = {
     await queryInterface.createTable(
       "User_tags",
       {
-        user_email: {
+        user_id: {
           type: Sequelize.STRING,
           references: {
             model: "Users",
-            key: "email",
+            key: "id",
           },
         },
         tag_id: {
-          type: Sequelize.UUID,
+          type: Sequelize.INTEGER,
           references: {
             model: "Tags",
             key: "id",

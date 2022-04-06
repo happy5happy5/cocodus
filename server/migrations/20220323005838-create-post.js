@@ -7,23 +7,24 @@ module.exports = {
         id: {
           allowNull: false,
           primaryKey: true,
-          type: Sequelize.UUID,
+          type: Sequelize.INTEGER,
+          autoIncrement: true,
           unique: true,
         },
-        user_email: {
+        user_id: {
           type: Sequelize.STRING,
           references: {
             model: "Users",
-            key: "email",
+            key: "id",
           },
         },
-        title: {
-          type: Sequelize.STRING,
-        },
-        body: {
-          type: Sequelize.STRING,
+        jsonfile: {
+          type: Sequelize.JSON,
         },
         recruiting: {
+          type: Sequelize.BOOLEAN,
+        },
+        online: {
           type: Sequelize.BOOLEAN,
         },
         veiw_count: {
@@ -35,7 +36,10 @@ module.exports = {
         total_comment: {
           type: Sequelize.INTEGER,
         },
-        location: {
+        lat: {
+          type: Sequelize.STRING,
+        },
+        long: {
           type: Sequelize.STRING,
         },
         createdAt: {

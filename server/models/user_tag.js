@@ -15,8 +15,8 @@ module.exports = (sequelize, DataTypes) => {
   }
   User_tag.init(
     {
-      user_email: DataTypes.STRING,
-      tag_id: DataTypes.UUID,
+      user_id: DataTypes.STRING,
+      tag_id: DataTypes.INTEGER,
     },
     {
       sequelize,
