@@ -9,12 +9,33 @@ import {
   ModalBtn,
 } from "./DeleteModal.styled";
 import { useNavigate } from "react-router-dom";
+import { accessTokenStore } from "../../Store/accesstoken-zustand";
+import axios from "axios";
+import { registerUserInfoStore } from "../../Store/RegisterUserInfo-zustand";
 
 function DeleteUserModal({ closeModal }) {
+  const { cocodusId, accessToken, isLogin, chgIsLogin } = accessTokenStore();
+  const { chgInput, chgTag, chgMarker } = registerUserInfoStore();
   let navigate = useNavigate();
-  const onRemove = () => {
-    closeModal();
-    navigate("/");
+  const onRemove = async () => {
+    let temp = await axios({
+      baseURL: "https://server.cocodus.site",
+      url: "/user/info",
+      method: "delete",
+      params: {
+        cocodusId,
+        accessToken,
+        isLogin,
+      },
+    });
+    if (temp.status === 201) {
+      chgInput("");
+      chgTag([]);
+      chgMarker({ place_name: "", road_address_name: "", y: "", x: "" });
+      chgIsLogin(false);
+      closeModal();
+      navigate("/");
+    }
   };
   return (
     <>

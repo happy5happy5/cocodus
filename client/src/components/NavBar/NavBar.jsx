@@ -6,6 +6,7 @@ import {
   Name,
   Icon,
   Img,
+  Icon2,
 } from "./NavBar.styled";
 import { Container } from "../../components/styles/Container.styled";
 import { Button } from "../../components/styles/Button.styled";
@@ -21,7 +22,7 @@ import LoginModal from "../LoginModal/LoginModal";
 import { registerUserInfoStore } from "../../Store/RegisterUserInfo-zustand";
 
 export default function NavBar() {
-  const { isLogin } = accessTokenStore();
+  const { isLogin, accessToken } = accessTokenStore();
   const { nickName } = registerUserInfoStore();
 
   // 계정을 클릭하면 나오는 view
@@ -48,27 +49,23 @@ export default function NavBar() {
   return (
     <ThemeProvider theme={theme}>
       <GlobalStyles />
-      <StyledHeader>
+      <StyledHeader style={{ opacity: 1 }}>
         <Container>
           <Nav>
             <Logo onClick={() => navigate("/")} src="logo2.png" alt="" />
-            {isLogin ? (
+            {isLogin && accessToken && nickName ? (
               <>
-                {/* <Button onClick={() => navigate("/register")}>
-                  새 게시글 쓰기
-                </Button> */}
-                {/* <Button onClick={logoutHandle}>로그아웃</Button> */}
                 <Block onClick={onHandleMenu}>
-                  <Img src="UserIcon.png" />
+                  <Img src="UserIcon7.png" alt="" />
                   <Name>{nickName}님</Name>
                   <Icon>
                     <CgMenu color="#3c4146" size={25} />
                   </Icon>
                   {menuVisible && (
                     <>
-                      <Icon huge>
-                        <AiFillCaretUp style={{ color: "#fff" }} size={50} />
-                      </Icon>
+                      <Icon2 huge>
+                        <AiFillCaretUp style={{ color: "#fff" }} size={65} />
+                      </Icon2>
                       <DropDownBar />
                     </>
                   )}

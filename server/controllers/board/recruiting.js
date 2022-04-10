@@ -1,26 +1,40 @@
+const { Post } = require("../../models");
+
 module.exports = {
   patch: async (req, res) => {
-    // 내가 쓴 모임 정보가 여러 이유로 더이상 사람을 모집하지 않을때 수정
-    //req에 아래 내용이 다 들어가 있어야 합니다.
-    {
-      /*
-      헤더에 담겨서 accessToken하고 cocodusid
-      {accessToken: accessToken,
-      cocodusid: cocodusid}
-     
-      본문은(외부에 공개되도 상관 없는 내용들) Payload json
-      {
-        postId : 모임 정보 번호
-        recruiting : 모집중
-     }
-    */
+    const { accessToken, user_id, postId, recruiting } = req.query;
+    if (user_id.length) {
+      const cocodusMember = await User.findOne({
+        where: { id: user_id || "" },
+      });
+      const isMember = await isAuthorized(accessToken, user_id.split("+")[0]);
+      if (!cocodusMember && !isMember)
+        return res.status(401).send("not Authorized"); //id가 일치하지 않으므로 더이상 진행할 필요가 없습니다
+    } else {
+      return res.status(400).send("Bad Request");
     }
-    // 이렇게 받으면, 서버에서 DB에 해당 내용을 postId로 조회해서 수정하겠습니다.
-    // token하고 id하고 postId만 확인하면 됨
-    // 저 세개가 잘못된 값일때만 403 응답
-    // true면 모집, false면 마감
 
-    //별도의 복잡한 응답이 필요 없습니다
-    res.status(200).send("board yes recruiting patch");
+    if (isNaN(Number(postId))) {
+      // console.log(`post 번호가 ${typeof postId} type 입니다`); //만약 postId가 숫자가 아닐 경우
+      return res.status(400).send("Not found post id");
+    }
+
+    if (typeof recruiting !== "boolean") {
+      return res.status(401).send("모집 여부가 잘못돼었습니다"); //전송값이 불리언이 아닙니다
+    }
+
+    const onRecruiting = await Post.update(
+      {
+        recruiting,
+      },
+      {
+        where: { id: postId },
+      }
+    );
+    if (!onRecruiting) {
+      return res.status(401).send("상태를 변경할 수 없습니다"); //전송값이 불리언이 아닙니다
+    }
+
+    return res.status(200).send("recruiting start || end");
   },
 };

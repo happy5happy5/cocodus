@@ -31,6 +31,7 @@ function UserInfoEditPage(props) {
 
   const onEditHandler = async () => {
     openModal();
+
     const editData = {
       accessToken,
       cocodusId,
@@ -42,16 +43,19 @@ function UserInfoEditPage(props) {
       longitudeX,
     };
     const editPost = await axios({
-      method: "PATCH",
-      url: "http://localhost:8080/user/info",
-      data: {
-        jsonFile: JSON.stringify(editData),
-        user_id: cocodusId,
+      method: "POST",
+      url: "https://server.cocodus.site/board/writing",
+      params: {
+        id: cocodusId,
+        name: nickName,
+        accessToken,
+        roadAddress,
+        location: placeName,
         lat: latitudeY,
         long: longitudeX,
+        tag,
       },
     });
-    console.log(editPost);
   };
 
   return (

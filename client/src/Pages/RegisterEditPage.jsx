@@ -13,8 +13,11 @@ import axios from "axios";
 import { accessTokenStore } from "../Store/accesstoken-zustand";
 import { registerStore } from "../Store/Register-zustand";
 import { boardPatchLoadingStore } from "../Store/loading-zustand";
+import { postData } from "../Store/postData-zustand";
+import { useNavigate } from "react-router-dom";
 
 function RegisterEditPage(props) {
+  let navigate = useNavigate();
   const { chgLoading, chgError } = boardPatchLoadingStore();
   const { openModal } = registerEditModalStore();
   const { accessToken, cocodusId } = accessTokenStore();
@@ -24,11 +27,13 @@ function RegisterEditPage(props) {
     content,
     placeName,
     roadAddress,
+    recruiting,
     latitudeY,
     longitudeX,
   } = registerStore();
+  const { specificdata } = postData();
   const { title, date, online } = inputs;
-
+  const postId = specificdata[0].id;
   // 글 수정 axios call
   const onEditHandler = async () => {
     try {
@@ -48,18 +53,21 @@ function RegisterEditPage(props) {
       };
       const editPost = await axios({
         method: "PATCH",
-        url: "http://localhost:8080/board/list",
-        data: {
-          jsonFile: JSON.stringify(editData),
+        url: "https://server.cocodus.site/board/writing",
+        params: {
           accessToken,
           user_id: cocodusId,
+          postId,
+          tag,
+          online,
+          recruiting,
           lat: latitudeY,
           long: longitudeX,
-          recruiting: true,
+          jsonfile: JSON.stringify(editData),
         },
       });
-      console.log(editPost);
       openModal();
+      navigate("/");
     } catch (e) {
       chgError(e);
     }

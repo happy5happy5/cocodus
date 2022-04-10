@@ -4,7 +4,9 @@ import React, { useState } from "react";
 import { Editor } from "react-draft-wysiwyg";
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 import styled from "styled-components";
-import { EditorState } from "draft-js";
+import { EditorState, convertToRaw } from "draft-js";
+import { registerStore } from "../Store/Register-zustand";
+// import draftToHtml from "draftjs-to-html";
 
 const MyBlock = styled.div`
   .wrapper-class {
@@ -31,14 +33,18 @@ const TestEditorForm = ({ onChange }) => {
   // useState로 상태관리하기 초기값은 EditorState.createEmpty()
   // EditorState의 비어있는 ContentState 기본 구성으로 새 개체를 반환 => 이렇게 안하면 상태 값을 나중에 변경할 수 없음.
   const [editorState, setEditorState] = useState(EditorState.createEmpty());
-
+  const { content } = registerStore();
   const onEditorStateChange = (editorState) => {
     // editorState에 값 설정
     setEditorState(editorState);
   };
+  const onEditorChange = (val) => {
+    setEditorState(val);
+  };
 
   return (
     <>
+      {/* {console.log(editorState.getCurrentContent().getPlainText())} */}
       <MyBlock bottom="2rem">
         <Editor
           editiorState={editorState}
@@ -64,9 +70,16 @@ const TestEditorForm = ({ onChange }) => {
           // 초기값 설정
           editorState={editorState}
           // 에디터의 값이 변경될 때마다 onEditorStateChange 호출
-          onEditorStateChange={onEditorStateChange}
+          // onEditorStateChange={onEditorStateChange}
           onChange={onChange}
+          onEditorStateChange={onEditorChange}
         />
+        {/* <textarea
+          // style={{ display: "none" }}
+          // value={draftToHtml(convertToRaw(editorState.getCurrentContent()))}
+          value={content}
+          onChange={onChange}
+        ></textarea> */}
       </MyBlock>
     </>
   );

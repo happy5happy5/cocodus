@@ -2,21 +2,20 @@ import React from "react";
 import { accessTokenStore } from "../../Store/accesstoken-zustand";
 import { useNavigate } from "react-router-dom";
 import { Div, Ul, Li } from "./DropDownBar.styled";
+import { registerUserInfoStore } from "../../Store/RegisterUserInfo-zustand";
 
 const DropDownBar = () => {
   let navigate = useNavigate();
-  //   const dispatch = useDispatch();
-  //   const handleLogout = async () => {
-  //     await authService.logout();
-  //     dispatch(clearUser());
-  //     dispatch(clearStep());
-  //     authService.resetToken();
-  //   };
-  const { isLogin, chgIsLogin, chgAccToken } = accessTokenStore();
+
+  const { chgInput } = registerUserInfoStore();
+  const { chgIsLogin, chgAccToken, chgCocoId } = accessTokenStore();
   const logoutHandle = () => {
     window.document.cookie = "accessToken" + "=; Max-Age=-99999999;";
+    window.document.cookie = "cocodusId" + "=; Max-Age=-99999999;";
     chgIsLogin(false);
     chgAccToken("");
+    chgInput("");
+    chgCocoId("");
   };
 
   return (

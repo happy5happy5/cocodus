@@ -10,6 +10,8 @@ module.exports = {
             model: "Users",
             key: "id",
           },
+          onDelete: "cascade",
+          onUpdate: "cascade",
         },
         tag_id: {
           type: Sequelize.INTEGER,
@@ -17,12 +19,16 @@ module.exports = {
             model: "Tags",
             key: "id",
           },
+          onDelete: "cascade",
+          onUpdate: "cascade",
         },
       },
       {
         // 테이블 옵션
         timestamps: false,
         underscored: true,
+        createdAt: false,
+        updatedAt: false,
       }
     );
   },

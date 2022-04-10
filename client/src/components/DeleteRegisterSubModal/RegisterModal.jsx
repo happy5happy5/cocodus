@@ -13,22 +13,35 @@ import axios from "axios";
 import { accessTokenStore } from "../../Store/accesstoken-zustand";
 import { boardPostLoadingStore } from "../../Store/loading-zustand";
 import { registerUserInfoStore } from "../../Store/RegisterUserInfo-zustand";
+import { useNavigate } from "react-router-dom";
+import { registerNotiModalStore } from "../../Store/Modal-zustand";
+import Modal from "../Modal/Modal";
 
 function RegisterModal({ closeModal }) {
+  let navigate = useNavigate();
+  const { modalOpen2, openModal2, closeModal2 } = registerNotiModalStore();
   const { chgLoading, chgError } = boardPostLoadingStore();
   const { accessToken, cocodusId } = accessTokenStore();
   const { nickName } = registerUserInfoStore();
   const {
     inputs,
+    chgInput,
+    chgOnline,
     tag,
+    chgTag,
     content,
     placeName,
     roadAddress,
     latitudeY,
     longitudeX,
+    chgMarker,
     year,
+    chgYear,
     hour,
+    chgHour,
     minute,
+    chgMin,
+    recruiting,
   } = registerStore();
   const { title, online } = inputs;
 
@@ -38,7 +51,6 @@ function RegisterModal({ closeModal }) {
       chgError(null);
       chgLoading(true);
       const postData = {
-        accessToken,
         cocodusId,
         nickName,
         title,
@@ -54,20 +66,27 @@ function RegisterModal({ closeModal }) {
 
       const newPost = await axios({
         method: "POST",
-        url: "http://localhost:8080/board/writing",
+        url: "https://server.cocodus.site/board/writing",
         data: {
-          jsonfile: JSON.stringify(postData),
           accessToken,
           user_id: cocodusId,
           lat: latitudeY,
           long: longitudeX,
-          recruiting: true,
+          recruiting,
           online: online,
           tag,
+          jsonfile: JSON.stringify(postData),
         },
       });
-      console.log(newPost);
+      // console.log(newPost);
+      // 등록 정보 초기화
+      chgInput("title", "");
+      chgOnline("online", false);
+      chgTag([]);
+      chgMarker({ place_name: "", road_address_name: "", y: "", x: "" });
       closeModal(); // 모달창 닫는 함수
+      navigate("/");
+      // openModal2();
     } catch (e) {
       chgError(e);
     }
@@ -85,6 +104,10 @@ function RegisterModal({ closeModal }) {
           취소하기
         </ModalBtn>
         <ModalBtn onClick={onRegister}>등록하기</ModalBtn>
+        <Modal open={modalOpen2} close={closeModal2} header="알림">
+          <Logo src="logo2.png" alt="" />
+          <Subject>게시물이 등록되었습니다.</Subject>
+        </Modal>
       </ModalBtnBlock>
     </>
   );

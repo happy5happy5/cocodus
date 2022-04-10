@@ -1,26 +1,31 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import Select from "react-select";
 import styled from "styled-components";
+import { postData } from "../../Store/postData-zustand";
 import { registerStore } from "../../Store/Register-zustand";
-
-export const FlexBox = styled.div`
-  display: flex;
-`;
-
-export const Div = styled.div`
-  margin-right: ${(props) => props.right};
-  margin-left: ${(props) => props.left};
-  display: flex;
-  align-items: center;
-  justify-content: center;
-`;
-
-export const SelectTag = styled(Select)`
-  margin-right: ${(props) => props.right};
-`;
-
 function CalendarComponent(props) {
   const { year, hour, minute, chgYear, chgHour, chgMin } = registerStore();
+  const { specificdata } = postData();
+  useEffect(() => {
+    if (specificdata.length) {
+      let temp = specificdata[0].jsonfile.date.split(" ");
+      chgYear(
+        temp[0] +
+          " " +
+          (temp[1].length > 2 ? temp[1] : "0" + temp[1]) +
+          " " +
+          temp[2]
+      );
+      chgHour(temp[3] === "오전" ? temp[4] : +temp[4].split("시")[0] + 12);
+      if (temp[5]) {
+        chgMin(
+          temp[5].split("분")[0].length === 1
+            ? "0" + temp[5].split("분")[0]
+            : temp[5].split("분")[0]
+        );
+      }
+    }
+  }, []);
   // 당일로부터 14일 이후까지만의 날짜를 Select의 값으로 전해주기위함
   let dateOptions = [];
   for (let i = 0; i < 14; i++) {
@@ -36,7 +41,7 @@ function CalendarComponent(props) {
     if (date < 10) {
       date = `0${date}`;
     }
-    let fulldate = `${year}-${month}-${date}`;
+    let fulldate = `${year}년 ${month}월 ${date}일`;
     obj.value = fulldate;
     obj.label = fulldate;
     dateOptions.push(obj);
@@ -72,18 +77,20 @@ function CalendarComponent(props) {
       ...provided,
       alignItems: "baseline",
       backgroundColor: value ? "gray" : "white",
+      border: "1px solid #ced4da",
+      borderRadius: "10px",
     }),
   });
 
   const yearChange = (value) => {
     chgYear(value.value);
-    console.log(year);
   };
   const hourChange = (value) => {
     chgHour(value.value);
   };
   const minuteChange = (value) => {
     chgMin(value.value);
+    // console.log(value.value);
   };
   return (
     <FlexBox>
@@ -110,7 +117,7 @@ function CalendarComponent(props) {
         placeholder="00"
         styles={customStyles}
       />
-      <Div left="1rem" right="1rem">
+      <Div left="0.25rem" right="0.75rem">
         시
       </Div>
       <Select
@@ -123,9 +130,28 @@ function CalendarComponent(props) {
         placeholder="00"
         styles={customStyles}
       />
-      <Div left="1rem">분</Div>
+      <Div left="0.25rem">분</Div>
     </FlexBox>
   );
 }
+
+export const FlexBox = styled.div`
+  display: flex;
+`;
+
+export const Div = styled.div`
+  margin-right: ${(props) => props.right};
+  margin-left: ${(props) => props.left};
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 500;
+  font-size: 18px;
+  padding: 0.25rem;
+`;
+
+export const SelectTag = styled(Select)`
+  margin-right: ${(props) => props.right};
+`;
 
 export default CalendarComponent;

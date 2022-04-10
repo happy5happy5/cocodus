@@ -17,30 +17,21 @@ import KakaoMap from "../KakaoMap";
 import { registerStore } from "../../Store/Register-zustand";
 import KakaoSearchBox from "../KakaoSearchBox/KakaoSearchBox";
 import CalendarComponent from "../Calendar/CalendarComponent";
+import { registerUserInfoStore } from "../../Store/RegisterUserInfo-zustand";
 
 function Register() {
   const { inputs, tag, chgInput, chgOnline, chgTag, chgMsg } = registerStore();
-
+  const { nickName } = registerUserInfoStore();
   const { title, online } = inputs;
   const onChange = (e) => {
     const { name, value } = e.target;
-    // console.log(value);
     chgInput(name, value);
-  };
-
-  // 기술 스택 태그
-  const onTagChange = (e) => {
-    // console.log(e);
-    const opts = e.map((el) => el.value);
-    // console.log(opts);
-    // console.log(tag);
-    chgTag(opts);
   };
 
   // 온라인 가능 여부
   const onCheckChange = (e) => {
+    // console.log(e.target.checked);
     const { name, checked } = e.target;
-    // console.log(online);
     chgOnline(name, checked);
   };
 
@@ -64,10 +55,10 @@ function Register() {
           value={title}
         />
         <FlexBox>
-          <Img src="UserIcon.png" />
+          <Img src="UserIcon7.png" />
           <InputBox
             type="text"
-            defaultValue="김코딩"
+            value={nickName}
             width="15%"
             backColor="#fff"
             Border="none"
@@ -78,18 +69,27 @@ function Register() {
         </FlexBox>
         <FlexBox>
           <Div>사용 언어</Div>
-          <LangOptTag onChange={onTagChange} />
+          <LangOptTag />
         </FlexBox>
         <FlexBox>
           <CalendarComponent />
           <Label>
-            <CheckBox
-              name="online"
-              type="checkbox"
-              id="online"
-              onChange={onCheckChange}
-              value={online}
-            />
+            {online ? (
+              <CheckBox
+                name="online"
+                type="checkbox"
+                id="online"
+                onChange={onCheckChange}
+                checked
+              />
+            ) : (
+              <CheckBox
+                name="online"
+                type="checkbox"
+                id="online"
+                onChange={onCheckChange}
+              />
+            )}
             온라인 가능
           </Label>
         </FlexBox>
