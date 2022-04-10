@@ -29,17 +29,9 @@ function Register() {
     chgInput(name, value);
   };
 
-  // 기술 스택 태그
-  const onTagChange = (e) => {
-    // console.log(e);
-    const opts = e.map((el) => el.value);
-    // console.log(opts);
-    // console.log(tag);
-    chgTag(opts);
-  };
-
   // 온라인 가능 여부
   const onCheckChange = (e) => {
+    console.log(e.target.checked);
     const { name, checked } = e.target;
     // console.log(online);
     chgOnline(name, checked);
@@ -79,18 +71,27 @@ function Register() {
         </FlexBox>
         <FlexBox>
           <Div>사용 언어</Div>
-          <LangOptTag onChange={onTagChange} />
+          <LangOptTag />
         </FlexBox>
         <FlexBox>
           <CalendarComponent />
           <Label>
-            <CheckBox
-              name="online"
-              type="checkbox"
-              id="online"
-              onChange={onCheckChange}
-              value={online}
-            />
+            {online ? (
+              <CheckBox
+                name="online"
+                type="checkbox"
+                id="online"
+                onChange={onCheckChange}
+                checked
+              />
+            ) : (
+              <CheckBox
+                name="online"
+                type="checkbox"
+                id="online"
+                onChange={onCheckChange}
+              />
+            )}
             온라인 가능
           </Label>
         </FlexBox>

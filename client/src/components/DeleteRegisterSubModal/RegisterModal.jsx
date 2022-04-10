@@ -25,15 +25,23 @@ function RegisterModal({ closeModal }) {
   const { nickName } = registerUserInfoStore();
   const {
     inputs,
+    chgInput,
+    chgOnline,
     tag,
+    chgTag,
     content,
     placeName,
     roadAddress,
     latitudeY,
     longitudeX,
+    chgMarker,
     year,
+    chgYear,
     hour,
+    chgHour,
     minute,
+    chgMin,
+    recruiting,
   } = registerStore();
   const { title, online } = inputs;
 
@@ -58,19 +66,24 @@ function RegisterModal({ closeModal }) {
 
       const newPost = await axios({
         method: "POST",
-        url: "http://localhost:8080/board/writing",
+        url: "https://server.cocodus.site/board/writing",
         data: {
           jsonfile: JSON.stringify(postData),
           accessToken,
           user_id: cocodusId,
           lat: latitudeY,
           long: longitudeX,
-          recruiting: true,
+          recruiting,
           online: online,
           tag,
         },
       });
       console.log(newPost);
+      // 등록 정보 초기화
+      chgInput("title", "");
+      chgOnline("online", false);
+      chgTag([]);
+      chgMarker({ place_name: "", road_address_name: "", y: "", x: "" });
       closeModal(); // 모달창 닫는 함수
       openModal2();
       navigate("/");

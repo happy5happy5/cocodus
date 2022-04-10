@@ -6,6 +6,7 @@ import {
   Name,
   Icon,
   Img,
+  Icon2,
 } from "./NavBar.styled";
 import { Container } from "../../components/styles/Container.styled";
 import { Button } from "../../components/styles/Button.styled";
@@ -21,7 +22,7 @@ import LoginModal from "../LoginModal/LoginModal";
 import { registerUserInfoStore } from "../../Store/RegisterUserInfo-zustand";
 
 export default function NavBar() {
-  const { isLogin } = accessTokenStore();
+  const { isLogin, accessToken } = accessTokenStore();
   const { nickName } = registerUserInfoStore();
 
   // 계정을 클릭하면 나오는 view
@@ -52,7 +53,7 @@ export default function NavBar() {
         <Container>
           <Nav>
             <Logo onClick={() => navigate("/")} src="logo2.png" alt="" />
-            {isLogin ? (
+            {isLogin && accessToken && nickName ? (
               <>
                 <Block onClick={onHandleMenu}>
                   <Img src="UserIcon7.png" alt="" />
@@ -62,9 +63,9 @@ export default function NavBar() {
                   </Icon>
                   {menuVisible && (
                     <>
-                      <Icon huge>
-                        <AiFillCaretUp style={{ color: "#fff" }} size={50} />
-                      </Icon>
+                      <Icon2 huge>
+                        <AiFillCaretUp style={{ color: "#fff" }} size={65} />
+                      </Icon2>
                       <DropDownBar />
                     </>
                   )}

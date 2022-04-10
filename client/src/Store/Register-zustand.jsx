@@ -10,7 +10,7 @@ export const registerStore = create((set) => ({
     online: false,
   },
 
-  recuiting: true,
+  recruiting: true,
   //모집중 onChange 함수
   chgrecruiting: (value) =>
     set((state) => ({
@@ -70,6 +70,12 @@ export const registerStore = create((set) => ({
       content: text,
     })),
 
+  // editorState: EditorState.createEmpty(),
+  // onEditorStateChange: (value) =>
+  //   set((state) => ({
+  //     editorState: value,
+  //   })),
+
   // 지도(주소) 관련 변수
   // 검색명
   place: "",
@@ -97,5 +103,11 @@ export const registerStore = create((set) => ({
       roadAddress: value.road_address_name,
       latitudeY: value.y,
       longitudeX: value.x,
+    })),
+
+  chgPlaceName: (value) =>
+    set((state) => ({
+      placeName: value.placeName,
+      roadAddress: value.roadAddress,
     })),
 }));
