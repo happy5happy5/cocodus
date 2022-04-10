@@ -46,7 +46,7 @@ function RegisterUserInfoModal({ closeModal }) {
       const userDataSave = await axios({
         method: "POST",
         url: "https://server.cocodus.site/user/info",
-        data: {
+        params: {
           id: cocodusId,
           name: nickName,
           accessToken,
@@ -56,15 +56,23 @@ function RegisterUserInfoModal({ closeModal }) {
           long: longitudeX,
           tag,
         },
+        // data: {
+        //   id: cocodusId,
+        //   name: nickName,
+        //   accessToken,
+        //   roadAddress,
+        //   location: placeName,
+        //   lat: latitudeY,
+        //   long: longitudeX,
+        //   tag,
+        // },
       });
       if (userDataSave.status === 201) {
         // console.log(userDataSave);
         closeModal();
         navigate("/");
       } else {
-        alert("RegisterUserInfoModal.jsx 이 파일에서 뭔가 잘못됐어요!!");
         closeModal();
-        console.log(userDataSave.status);
       }
     } catch (e) {
       chgError(e);

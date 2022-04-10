@@ -56,8 +56,6 @@ function CommentArea({ cmtData }) {
         setCmtShow(false);
         setCmtText("");
         setReload();
-      } else {
-        alert("뭔가 크게 잘못됐어요! 상태코드=", comment.status);
       }
     }
   };
@@ -65,7 +63,7 @@ function CommentArea({ cmtData }) {
   return (
     <Block>
       <FlexBox>
-        <Img src="UserIcon.png" alt="userimg" />
+        <Img src="UserIcon7.png" alt="userimg" />
         <div>
           <UserName>{cmtData.name}</UserName>
           <CreatedAt>2022-03-25</CreatedAt>
@@ -110,8 +108,6 @@ function CommentList() {
       });
       if (response.status === 200) {
         setCmtList(response.data);
-      } else {
-        alert("받아오기 안된다 고쳐라");
       }
     }
   }, [reLoad, specificdata]);
